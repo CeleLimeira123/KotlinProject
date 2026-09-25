@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">celeste</string>
+    <string name="signin_title">Sign In</string>
+    <string name="signin_button">Sign In</string>
+</resources>

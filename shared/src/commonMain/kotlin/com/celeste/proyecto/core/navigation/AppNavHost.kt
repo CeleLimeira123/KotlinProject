@@ -49,7 +49,7 @@ fun AppNavHost(
                 onEvent = viewModel::onEvent,
                 onNavigateHome = {
                     navController.navigate(NavRoute.Catalog.route) {
-                        popUpTo(0) { inclusive = true }
+                        popUpTo(NavRoute.SignIn.route) { inclusive = true }
                     }
                 },
                 onNavigateToSignUp = {
@@ -67,7 +67,7 @@ fun AppNavHost(
                     when (effect) {
                         is SignUpEffects.NavigateToHome -> {
                             navController.navigate(NavRoute.Catalog.route) {
-                                popUpTo(0) { inclusive = true }
+                                popUpTo(NavRoute.SignIn.route) { inclusive = true }
                             }
                         }
                         is SignUpEffects.ShowToast -> {}

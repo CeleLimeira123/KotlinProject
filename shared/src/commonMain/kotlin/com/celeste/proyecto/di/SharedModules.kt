@@ -42,9 +42,9 @@ val dataModule = module {
     singleOf(::UserInformationRepositoryImpl) bind UserInformationRepository::class
     single<GithubRemoteDataSource> { GitHubApiService() }
     singleOf(::GithubRepositoryImpl) bind GithubRepository::class
-    singleOf(::CatalogService)
-    singleOf(::CatalogRemoteDataSource)
-    singleOf(::CatalogRepositoryImpl) bind CatalogRepository::class
+    single { CatalogService() }
+    single { CatalogRemoteDataSource(get()) }
+    single<CatalogRepository> { CatalogRepositoryImpl(get()) }
 }
 
 val domainModule = module {

@@ -65,8 +65,8 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
-            implementation("io.coil-kt.coil3:coil-compose:3.1.0")
-            implementation("io.coil-kt.coil3:coil-network-ktor3:3.1.0")
+            implementation("io.coil-kt.coil3:coil-compose:3.5.0")
+            implementation("io.coil-kt.coil3:coil-network-ktor3:3.5.0")
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

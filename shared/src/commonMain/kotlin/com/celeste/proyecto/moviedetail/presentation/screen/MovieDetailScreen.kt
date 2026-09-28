@@ -2,10 +2,13 @@ package com.celeste.proyecto.moviedetail.presentation.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,8 +34,17 @@ fun MovieDetailScreen(
         } else {
             state.movieDetail?.let { detail ->
                 Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+                    OutlinedButton(
+                        onClick = { onEvent(MovieDetailEvents.OnBackClicked) },
+                        modifier = Modifier.padding(bottom = 16.dp),
+                    ) {
+                        Text("⬅ Volver")
+                    }
+
                     Text(text = detail.title, style = MaterialTheme.typography.headlineLarge)
-                    Text(text = "Rating: ${detail.rating}", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = "Rating: ⭐ ${detail.rating}", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(text = detail.overview, style = MaterialTheme.typography.bodyLarge)
                 }
             }

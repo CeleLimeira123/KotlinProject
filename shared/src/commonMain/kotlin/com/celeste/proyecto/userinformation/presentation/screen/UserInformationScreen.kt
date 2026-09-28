@@ -16,6 +16,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +41,15 @@ fun UserInformationScreen(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            OutlinedButton(onClick = { onEvent(UserInformationEvents.OnBackClicked) }) {
+                Text("⬅ Volver")
+            }
+        }
+
         Text(
             text = "Búsqueda GitHub & Información",
             style = MaterialTheme.typography.headlineMedium,
@@ -92,7 +102,7 @@ fun UserInformationScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Tarjeta de Error (por ejemplo, para el 404 de GitHub)
+        // Tarjeta de Error
         if (state.error != null) {
             Card(
                 colors = CardDefaults.cardColors(
@@ -124,11 +134,11 @@ fun UserInformationScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(text = "Alias: ${githubUser.alias}", style = MaterialTheme.typography.bodyLarge)
                     Text(
-                        text = "Empresa: ${if (githubUser.company.isBlank()) "No especificada" else githubUser.company}",
+                        text = "Empresa: ${githubUser.company.ifBlank { "No especificada" }}",
                         style = MaterialTheme.typography.bodyLarge,
                     )
                     Text(
-                        text = "Email: ${if (githubUser.email.isBlank()) "No público" else githubUser.email}",
+                        text = "Email: ${githubUser.email.ifBlank { "No público" }}",
                         style = MaterialTheme.typography.bodyLarge,
                     )
                     Text(

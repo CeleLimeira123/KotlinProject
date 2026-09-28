@@ -5,4 +5,5 @@ sealed interface UserInformationEvents {
     data object OnSearchClicked : UserInformationEvents
     data object LoadUserInformation : UserInformationEvents
     data object OnDismissError : UserInformationEvents
+    data object OnBackClicked : UserInformationEvents
 }

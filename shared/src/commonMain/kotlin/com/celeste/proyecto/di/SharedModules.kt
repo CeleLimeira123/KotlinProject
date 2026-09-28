@@ -1,5 +1,10 @@
 package com.celeste.proyecto.di
 
+import com.celeste.proyecto.catalog.data.datasource.CatalogRemoteDataSource
+import com.celeste.proyecto.catalog.data.repository.CatalogRepositoryImpl
+import com.celeste.proyecto.catalog.data.service.CatalogService
+import com.celeste.proyecto.catalog.domain.repository.CatalogRepository
+import com.celeste.proyecto.catalog.domain.usecase.GetCatalogMoviesUseCase
 import com.celeste.proyecto.moviedetail.data.repository.MovieDetailRepositoryImpl
 import com.celeste.proyecto.moviedetail.domain.repository.MovieDetailRepository
 import com.celeste.proyecto.moviedetail.domain.usecase.GetMovieDetailUseCase
@@ -37,6 +42,9 @@ val dataModule = module {
     singleOf(::UserInformationRepositoryImpl) bind UserInformationRepository::class
     single<GithubRemoteDataSource> { GitHubApiService() }
     singleOf(::GithubRepositoryImpl) bind GithubRepository::class
+    singleOf(::CatalogService)
+    singleOf(::CatalogRemoteDataSource)
+    singleOf(::CatalogRepositoryImpl) bind CatalogRepository::class
 }
 
 val domainModule = module {
@@ -47,6 +55,7 @@ val domainModule = module {
     factoryOf(::GetProfileUseCase)
     factoryOf(::GetUserInformationUseCase)
     factoryOf(::FindGithubAliasUseCase)
+    factoryOf(::GetCatalogMoviesUseCase)
 }
 
 val appModules = listOf(

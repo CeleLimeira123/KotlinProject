@@ -8,6 +8,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.celeste.proyecto.catalog.presentation.screen.CatalogScreen
+import com.celeste.proyecto.catalog.presentation.viewmodel.CatalogViewModel
 import com.celeste.proyecto.moviedetail.presentation.effects.MovieDetailEffects
 import com.celeste.proyecto.moviedetail.presentation.screen.MovieDetailScreen
 import com.celeste.proyecto.moviedetail.presentation.state.MovieDetailEvents
@@ -46,8 +48,8 @@ fun AppNavHost(
                 effect = viewModel.effect,
                 onEvent = viewModel::onEvent,
                 onNavigateHome = {
-                    navController.navigate(NavRoute.Movies.route) {
-                        popUpTo(NavRoute.SignIn.route) { inclusive = true }
+                    navController.navigate(NavRoute.Catalog.route) {
+                        popUpTo(0) { inclusive = true }
                     }
                 },
                 onNavigateToSignUp = {
@@ -64,8 +66,8 @@ fun AppNavHost(
                 viewModel.effect.collect { effect ->
                     when (effect) {
                         is SignUpEffects.NavigateToHome -> {
-                            navController.navigate(NavRoute.Movies.route) {
-                                popUpTo(NavRoute.SignIn.route) { inclusive = true }
+                            navController.navigate(NavRoute.Catalog.route) {
+                                popUpTo(0) { inclusive = true }
                             }
                         }
                         is SignUpEffects.ShowToast -> {}
@@ -78,6 +80,17 @@ fun AppNavHost(
                 onEvent = viewModel::onEvent,
                 onNavigateToSignIn = {
                     navController.popBackStack()
+                },
+            )
+        }
+
+        composable(NavRoute.Catalog.route) {
+            val viewModel: CatalogViewModel = koinViewModel()
+
+            CatalogScreen(
+                viewModel = viewModel,
+                onMovieClick = { movieId ->
+                    navController.navigate(NavRoute.MovieDetail.createRoute(movieId.toString()))
                 },
             )
         }

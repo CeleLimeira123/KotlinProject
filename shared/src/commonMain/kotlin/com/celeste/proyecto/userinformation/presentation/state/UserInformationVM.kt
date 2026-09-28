@@ -43,6 +43,11 @@ class UserInformationVM(
             is UserInformationEvents.OnDismissError -> {
                 _uiState.update { it.copy(error = null) }
             }
+            is UserInformationEvents.OnBackClicked -> {
+                viewModelScope.launch {
+                    _effect.emit(UserInformationEffects.NavigateBack)
+                }
+            }
         }
     }
 

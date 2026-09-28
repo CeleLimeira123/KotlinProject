@@ -1,6 +1,7 @@
 package com.celeste.proyecto.di
 
 import com.celeste.proyecto.catalog.presentation.viewmodel.CatalogViewModel
+import com.celeste.proyecto.crossref.presentation.screen.CrossrefViewModel
 import com.celeste.proyecto.moviedetail.presentation.state.MovieDetailVM
 import com.celeste.proyecto.movies.presentation.state.MoviesVM
 import com.celeste.proyecto.profile.presentation.state.ProfileVM
@@ -18,4 +19,5 @@ val presentationModule = module {
     viewModelOf(::MovieDetailVM)
     viewModelOf(::ProfileVM)
     viewModelOf(::UserInformationVM)
+    viewModelOf(::CrossrefViewModel)
 }

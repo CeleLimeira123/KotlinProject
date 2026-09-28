@@ -101,7 +101,7 @@ fun SignInScreen(
             leadingIcon = { Text("🔒", modifier = Modifier.padding(start = 8.dp)) },
             trailingIcon = {
                 IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
-                    Text(if (isPasswordVisible) "👁" else "🙈")
+                    Text(if (isPasswordVisible) "cultar contraseña" else "Mostrar contraseña")
                 }
             },
             visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),

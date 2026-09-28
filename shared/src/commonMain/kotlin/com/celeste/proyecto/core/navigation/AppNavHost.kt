@@ -10,6 +10,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.celeste.proyecto.catalog.presentation.screen.CatalogScreen
 import com.celeste.proyecto.catalog.presentation.viewmodel.CatalogViewModel
+import com.celeste.proyecto.crossref.presentation.screen.CrossrefScreen
+import com.celeste.proyecto.crossref.presentation.screen.CrossrefViewModel
 import com.celeste.proyecto.moviedetail.presentation.effects.MovieDetailEffects
 import com.celeste.proyecto.moviedetail.presentation.screen.MovieDetailScreen
 import com.celeste.proyecto.moviedetail.presentation.state.MovieDetailEvents
@@ -66,7 +68,7 @@ fun AppNavHost(
                 viewModel.effect.collect { effect ->
                     when (effect) {
                         is SignUpEffects.NavigateToHome -> {
-                            navController.navigate(NavRoute.Catalog.route) {
+                           navController.navigate(NavRoute.Crossref.route) {
                                 popUpTo(NavRoute.SignIn.route) { inclusive = true }
                             }
                         }
@@ -81,6 +83,16 @@ fun AppNavHost(
                 onNavigateToSignIn = {
                     navController.popBackStack()
                 },
+            )
+        }
+
+        composable(NavRoute.Crossref.route) {
+            val viewModel: CrossrefViewModel = koinViewModel()
+            val state by viewModel.uiState.collectAsState()
+
+            CrossrefScreen(
+                state = state,
+                onEvent = viewModel::onEvent,
             )
         }
 

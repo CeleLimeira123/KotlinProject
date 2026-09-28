@@ -5,6 +5,11 @@ import com.celeste.proyecto.catalog.data.repository.CatalogRepositoryImpl
 import com.celeste.proyecto.catalog.data.service.CatalogService
 import com.celeste.proyecto.catalog.domain.repository.CatalogRepository
 import com.celeste.proyecto.catalog.domain.usecase.GetCatalogMoviesUseCase
+import com.celeste.proyecto.crossref.data.datasource.CrossrefRemoteDataSource
+import com.celeste.proyecto.crossref.data.repository.CrossrefRepositoryImpl
+import com.celeste.proyecto.crossref.data.service.CrossrefService
+import com.celeste.proyecto.crossref.domain.repository.CrossrefRepository
+import com.celeste.proyecto.crossref.domain.usecase.GetCrossrefWorksUseCase
 import com.celeste.proyecto.moviedetail.data.repository.MovieDetailRepositoryImpl
 import com.celeste.proyecto.moviedetail.domain.repository.MovieDetailRepository
 import com.celeste.proyecto.moviedetail.domain.usecase.GetMovieDetailUseCase
@@ -45,6 +50,9 @@ val dataModule = module {
     single { CatalogService() }
     single { CatalogRemoteDataSource(get()) }
     single<CatalogRepository> { CatalogRepositoryImpl(get()) }
+    single { CrossrefService() }
+    single { CrossrefRemoteDataSource(get()) }
+    single<CrossrefRepository> { CrossrefRepositoryImpl(get()) }
 }
 
 val domainModule = module {
@@ -56,10 +64,12 @@ val domainModule = module {
     factoryOf(::GetUserInformationUseCase)
     factoryOf(::FindGithubAliasUseCase)
     factoryOf(::GetCatalogMoviesUseCase)
+    factoryOf(::GetCrossrefWorksUseCase)
 }
 
 val appModules = listOf(
     dataModule,
     domainModule,
     presentationModule,
+
 )

@@ -35,7 +35,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun AppNavHost(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = NavRoute.SignIn.route,
+    startDestination: String = NavRoute.Crossref.route,   // <- antes era NavRoute.SignIn.route
 ) {
     NavHost(
         navController = navController,

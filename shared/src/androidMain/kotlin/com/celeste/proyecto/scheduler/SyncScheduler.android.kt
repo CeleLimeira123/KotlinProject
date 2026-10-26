@@ -31,9 +31,17 @@ class SyncWorker(
 
             // Intento de envío de log gRPC (no debe hacer fallar el worker si este falla)
             try {
-                logRepository.sendLog("Sincronización periódica completada")
+                val logResult = logRepository.sendLog("Sincronización periódica completada")
+                logResult.fold(
+                    onSuccess = {
+                        Log.d("SyncWorker", "Log enviado por gRPC correctamente")
+                    },
+                    onFailure = { error ->
+                        Log.w("SyncWorker", "No se pudo enviar el log por gRPC: ${error.message}")
+                    },
+                )
             } catch (logErr: Exception) {
-                Log.w("SyncWorker", "Fallo al enviar log gRPC desde SyncWorker: ${logErr.message}")
+                Log.w("SyncWorker", "No se pudo enviar el log por gRPC: ${logErr.message}")
             }
 
             Result.success()

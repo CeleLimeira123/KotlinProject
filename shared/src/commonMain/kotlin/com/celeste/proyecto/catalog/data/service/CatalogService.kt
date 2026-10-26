@@ -9,7 +9,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 class CatalogService(
-    private val apiKey: String = "fa3e844ce31744388e07fa47c7c5d8c3",
+    private val apiKey: String,
     private val client: HttpClient = HttpClient {
         expectSuccess = true
         install(ContentNegotiation) {

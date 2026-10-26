@@ -6,10 +6,12 @@ import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.celeste.proyecto.catalog.domain.usecase.GetCatalogMoviesUseCase
+import com.celeste.proyecto.logs.domain.repository.LogRepository
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.concurrent.TimeUnit
@@ -20,14 +22,23 @@ class SyncWorker(
 ) : CoroutineWorker(appContext, workerParams), KoinComponent {
 
     private val getCatalogMoviesUseCase: GetCatalogMoviesUseCase by inject()
+    private val logRepository: LogRepository by inject()
 
     override suspend fun doWork(): Result {
         return try {
-            Log.d("SyncWorker", "Ejecutando sincronización periódica en segundo plano...")
+            Log.d("SyncWorker", "Ejecutando refresco del catálogo en segundo plano...")
             getCatalogMoviesUseCase()
+
+            // Intento de envío de log gRPC (no debe hacer fallar el worker si este falla)
+            try {
+                logRepository.sendLog("Sincronización periódica completada")
+            } catch (logErr: Exception) {
+                Log.w("SyncWorker", "Fallo al enviar log gRPC desde SyncWorker: ${logErr.message}")
+            }
+
             Result.success()
         } catch (e: Exception) {
-            Log.e("SyncWorker", "Error en sincronización periódica: ${e.message}", e)
+            Log.e("SyncWorker", "Error al refrescar el catálogo: ${e.message}", e)
             Result.retry()
         }
     }
@@ -54,7 +65,16 @@ actual class SyncScheduler(
     }
 
     actual fun syncNow() {
-        Log.d("SyncScheduler", "Ejecutando syncNow()...")
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val oneTimeRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(context).enqueue(oneTimeRequest)
+        Log.d("SyncScheduler", "Sincronización única encolada con WorkManager (syncNow).")
     }
 
     private companion object {

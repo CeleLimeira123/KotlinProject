@@ -43,6 +43,7 @@ import com.celeste.proyecto.userinformation.domain.usecase.FindGithubAliasUseCas
 import com.celeste.proyecto.userinformation.domain.usecase.GetUserInformationUseCase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -55,7 +56,7 @@ val dataModule = module {
     singleOf(::UserInformationRepositoryImpl) bind UserInformationRepository::class
     single<GithubRemoteDataSource> { GitHubApiService() }
     singleOf(::GithubRepositoryImpl) bind GithubRepository::class
-    single { CatalogService() }
+    single { CatalogService(get(named("TMDB_API_KEY"))) }
     single { CatalogRemoteDataSource(get()) }
     single<CatalogRepository> { CatalogRepositoryImpl(get()) }
     singleOf(::AppConfigRepositoryImpl) bind AppConfigRepository::class

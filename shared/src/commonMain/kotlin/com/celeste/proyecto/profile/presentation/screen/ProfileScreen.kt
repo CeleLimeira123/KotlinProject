@@ -43,6 +43,7 @@ import com.celeste.proyecto.resources.profile_user_prefix
 import com.celeste.proyecto.resources.user_info_placeholder
 import com.celeste.proyecto.resources.user_info_search_button
 import com.celeste.proyecto.resources.user_info_title
+import com.celeste.proyecto.scheduler.SyncScheduler
 import com.celeste.proyecto.userinformation.presentation.state.UserInformationEvents
 import com.celeste.proyecto.userinformation.presentation.state.UserInformationState
 import org.jetbrains.compose.resources.stringResource
@@ -62,6 +63,8 @@ fun ProfileScreen(
     val themeManager: ThemeManager = koinInject()
     val currentThemeMode by themeManager.themeMode.collectAsState()
     val currentFontSizeScale by themeManager.fontSizeScale.collectAsState()
+
+    val syncScheduler: SyncScheduler = koinInject()
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (state.isLoading) {
@@ -325,6 +328,17 @@ fun ProfileScreen(
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
+
+                    // Botón para probar envío de log vía gRPC / SyncScheduler
+                    Button(
+                        onClick = { syncScheduler.syncNow() },
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
+                        modifier = Modifier.fillMaxWidth().height(50.dp),
+                    ) {
+                        Text("📡 Probar envío de log")
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
 
                     // Botón rojo de Cerrar Sesión
                     Button(

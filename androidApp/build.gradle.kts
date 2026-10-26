@@ -14,6 +14,8 @@ kotlin {
 dependencies {
     implementation(project(":shared"))
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core.ktx)          // NUEVO: NotificationCompat
+    implementation(libs.firebase.messaging)         // NUEVO: notificaciones push (FCM)
     implementation(libs.koinAndroid)
     implementation(libs.compose.ui)
     implementation(libs.compose.foundation)
@@ -33,7 +35,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-       buildConfigField("String", "GLOBAL_PROVIDER", "\"CalyrSoft\"")
+        buildConfigField("String", "GLOBAL_PROVIDER", "\"CalyrSoft\"")
     }
 
     flavorDimensions += "environment"
@@ -53,7 +55,6 @@ android {
             dimension = "environment"
             val appName = "\"app-prod\""
             applicationIdSuffix = ""
-
 
             buildConfigField("String", "APP_NAME", appName)
             buildConfigField("String", "BASE_URL", "\"http://prod.api.calyrsoft.com\"")
@@ -87,7 +88,7 @@ android {
     }
 }
 
+// Firebase: el plugin lee androidApp/google-services.json (archivo local, no se sube a GitHub).
 if (file("google-services.json").exists()) {
     apply(plugin = "com.google.gms.google-services")
 }
-

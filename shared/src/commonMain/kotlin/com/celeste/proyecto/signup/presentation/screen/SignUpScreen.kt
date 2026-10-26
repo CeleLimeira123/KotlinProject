@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -29,8 +31,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.celeste.proyecto.resources.Res
+import com.celeste.proyecto.resources.signup_button
+import com.celeste.proyecto.resources.signup_email_label
+import com.celeste.proyecto.resources.signup_email_placeholder
+import com.celeste.proyecto.resources.signup_has_account
+import com.celeste.proyecto.resources.signup_name_label
+import com.celeste.proyecto.resources.signup_name_placeholder
+import com.celeste.proyecto.resources.signup_pass_label
+import com.celeste.proyecto.resources.signup_pass_placeholder
+import com.celeste.proyecto.resources.signup_signin_link
+import com.celeste.proyecto.resources.signup_subtitle
+import com.celeste.proyecto.resources.signup_title
 import com.celeste.proyecto.signup.presentation.state.SignUpEvents
 import com.celeste.proyecto.signup.presentation.state.SignUpState
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SignUpScreen(
@@ -39,16 +54,18 @@ fun SignUpScreen(
     onNavigateToSignIn: () -> Unit = {},
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .padding(24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "Crear Cuenta",
+            text = stringResource(Res.string.signup_title),
             style = MaterialTheme.typography.headlineLarge,
             color = Color(0xFF6750A4),
         )
@@ -56,7 +73,7 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Completa tus datos para registrarte",
+            text = stringResource(Res.string.signup_subtitle),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 32.dp),
@@ -66,8 +83,8 @@ fun SignUpScreen(
         OutlinedTextField(
             value = state.name,
             onValueChange = { onEvent(SignUpEvents.OnNameChanged(it)) },
-            label = { Text("Nombre completo") },
-            placeholder = { Text("Tu nombre") },
+            label = { Text(stringResource(Res.string.signup_name_label)) },
+            placeholder = { Text(stringResource(Res.string.signup_name_placeholder)) },
             singleLine = true,
             leadingIcon = { Text("👤", modifier = Modifier.padding(start = 8.dp)) },
             modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
@@ -77,8 +94,8 @@ fun SignUpScreen(
         OutlinedTextField(
             value = state.email,
             onValueChange = { onEvent(SignUpEvents.OnEmailChanged(it)) },
-            label = { Text("Correo electrónico") },
-            placeholder = { Text("ejemplo@correo.com") },
+            label = { Text(stringResource(Res.string.signup_email_label)) },
+            placeholder = { Text(stringResource(Res.string.signup_email_placeholder)) },
             singleLine = true,
             leadingIcon = { Text("✉", modifier = Modifier.padding(start = 8.dp)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -89,8 +106,8 @@ fun SignUpScreen(
         OutlinedTextField(
             value = state.pass,
             onValueChange = { onEvent(SignUpEvents.OnPasswordChanged(it)) },
-            label = { Text("Contraseña") },
-            placeholder = { Text("********") },
+            label = { Text(stringResource(Res.string.signup_pass_label)) },
+            placeholder = { Text(stringResource(Res.string.signup_pass_placeholder)) },
             singleLine = true,
             leadingIcon = { Text("🔒", modifier = Modifier.padding(start = 8.dp)) },
             trailingIcon = {
@@ -128,7 +145,7 @@ fun SignUpScreen(
                 )
             }
             Text(
-                text = "Registrarse",
+                text = stringResource(Res.string.signup_button),
                 style = MaterialTheme.typography.titleMedium,
             )
         }
@@ -141,12 +158,12 @@ fun SignUpScreen(
             horizontalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = "¿Ya tienes una cuenta? ",
+                text = stringResource(Res.string.signup_has_account),
                 style = MaterialTheme.typography.bodyMedium,
             )
             TextButton(onClick = onNavigateToSignIn) {
                 Text(
-                    text = "Inicia sesión",
+                    text = stringResource(Res.string.signup_signin_link),
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color(0xFF6750A4),
                 )

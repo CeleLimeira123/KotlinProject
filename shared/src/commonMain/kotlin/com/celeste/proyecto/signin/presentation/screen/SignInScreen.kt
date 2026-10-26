@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -30,10 +32,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.celeste.proyecto.resources.Res
+import com.celeste.proyecto.resources.signin_button
+import com.celeste.proyecto.resources.signin_email_label
+import com.celeste.proyecto.resources.signin_email_placeholder
+import com.celeste.proyecto.resources.signin_no_account
+import com.celeste.proyecto.resources.signin_pass_label
+import com.celeste.proyecto.resources.signin_pass_placeholder
+import com.celeste.proyecto.resources.signin_signup_link
+import com.celeste.proyecto.resources.signin_subtitle
+import com.celeste.proyecto.resources.signin_title
 import com.celeste.proyecto.signin.presentation.effects.SignInEffects
 import com.celeste.proyecto.signin.presentation.state.SignInEvents
 import com.celeste.proyecto.signin.presentation.state.SignInState
 import kotlinx.coroutines.flow.SharedFlow
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SignInScreen(
@@ -44,6 +57,7 @@ fun SignInScreen(
     onNavigateToSignUp: () -> Unit = {},
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(key1 = true) {
         effect.collect { fx ->
@@ -59,13 +73,14 @@ fun SignInScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .padding(24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         // Título de la pantalla
         Text(
-            text = "Bienvenido",
+            text = stringResource(Res.string.signin_title),
             style = MaterialTheme.typography.headlineLarge,
             color = Color(0xFF6750A4),
         )
@@ -73,7 +88,7 @@ fun SignInScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Inicia sesión para continuar",
+            text = stringResource(Res.string.signin_subtitle),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 32.dp),
@@ -83,8 +98,8 @@ fun SignInScreen(
         OutlinedTextField(
             value = state.email,
             onValueChange = { onEvent(SignInEvents.OnEmailChanged(it)) },
-            label = { Text("Correo electrónico") },
-            placeholder = { Text("ejemplo@correo.com") },
+            label = { Text(stringResource(Res.string.signin_email_label)) },
+            placeholder = { Text(stringResource(Res.string.signin_email_placeholder)) },
             singleLine = true,
             leadingIcon = { Text("✉", modifier = Modifier.padding(start = 8.dp)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -95,8 +110,8 @@ fun SignInScreen(
         OutlinedTextField(
             value = state.pass,
             onValueChange = { onEvent(SignInEvents.OnPasswordChanged(it)) },
-            label = { Text("Contraseña") },
-            placeholder = { Text("********") },
+            label = { Text(stringResource(Res.string.signin_pass_label)) },
+            placeholder = { Text(stringResource(Res.string.signin_pass_placeholder)) },
             singleLine = true,
             leadingIcon = { Text("🔒", modifier = Modifier.padding(start = 8.dp)) },
             trailingIcon = {
@@ -118,7 +133,7 @@ fun SignInScreen(
             )
         }
 
-        // Botón principal morado
+        // Botón principal
         Button(
             modifier = Modifier.fillMaxWidth().height(50.dp),
             enabled = !state.isLoading,
@@ -134,7 +149,7 @@ fun SignInScreen(
                 )
             }
             Text(
-                text = "Iniciar Sesión",
+                text = stringResource(Res.string.signin_button),
                 style = MaterialTheme.typography.titleMedium,
             )
         }
@@ -147,12 +162,12 @@ fun SignInScreen(
             horizontalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = "¿No tienes una cuenta? ",
+                text = stringResource(Res.string.signin_no_account),
                 style = MaterialTheme.typography.bodyMedium,
             )
             TextButton(onClick = onNavigateToSignUp) {
                 Text(
-                    text = "Regístrate",
+                    text = stringResource(Res.string.signin_signup_link),
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color(0xFF6750A4),
                 )

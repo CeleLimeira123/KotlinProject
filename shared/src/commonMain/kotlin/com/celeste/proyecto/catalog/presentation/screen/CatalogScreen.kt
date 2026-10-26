@@ -56,7 +56,7 @@ fun CatalogScreen(
             }
 
             is CatalogState.Success -> {
-                val suggestions = state.movies.take(appConfig.maxSugerenciasHome)
+                val suggestions = state.movies
 
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
@@ -125,10 +125,10 @@ fun CatalogScreen(
                         }
                     }
 
-                    // Subtítulo con max sugerencias
+                    // Subtítulo con catálogo completo
                     item(span = { GridItemSpan(2) }) {
                         Text(
-                            text = "Sugerencias del día (${suggestions.size} de ${appConfig.maxSugerenciasHome} máx)",
+                            text = "Catálogo completo (${suggestions.size} películas)",
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.outline,
                         )

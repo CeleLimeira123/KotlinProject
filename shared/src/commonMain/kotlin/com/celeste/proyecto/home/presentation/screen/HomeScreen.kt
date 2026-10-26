@@ -66,8 +66,8 @@ fun HomeScreen(
             }
 
             is CatalogState.Success -> {
-                // Muestra ÚNICAMENTE 5 películas como máximo en Inicio
-                val featuredMovies = state.movies.take(5)
+                // Muestra el número de películas configurado dinámicamente desde Remote Config (maxPeliculasInicio)
+                val featuredMovies = state.movies.take(appConfig.maxPeliculasInicio)
 
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
@@ -161,7 +161,7 @@ fun HomeScreen(
                         }
                     }
 
-                    // Renderiza SOLAMENTE las 5 películas destacadas
+                    // Renderiza SOLAMENTE las películas destacadas según maxPeliculasInicio
                     items(featuredMovies) { movie ->
                         FeaturedMovieCard(
                             movie = movie,

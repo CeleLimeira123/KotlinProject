@@ -23,13 +23,15 @@ class AppConfigRepositoryImpl(
     private fun read(): AppConfig {
         val mensaje = dataSource.getString(RemoteConfigKeys.MENSAJE_BIENVENIDA).ifBlank { AppConfig.DEFAULT.mensajeBienvenida }
         val promo = dataSource.getBoolean(RemoteConfigKeys.MOSTRAR_PROMO)
-        val maxSugerencias = dataSource.getLong(RemoteConfigKeys.MAX_SUGERENCIAS_HOME).toInt().let { if (it <= 0) AppConfig.DEFAULT.maxSugerenciasHome else it }
+        val maxPeliculas = dataSource.getLong(RemoteConfigKeys.MAX_PELICULAS_INICIO).toInt().let {
+            if (it <= 0) AppConfig.DEFAULT.maxPeliculasInicio else it
+        }
         val categoria = dataSource.getString(RemoteConfigKeys.CATEGORIA_DESTACADA).ifBlank { AppConfig.DEFAULT.categoriaDestacada }
 
         return AppConfig(
             mensajeBienvenida = mensaje,
             mostrarPromo = promo,
-            maxSugerenciasHome = maxSugerencias,
+            maxPeliculasInicio = maxPeliculas,
             categoriaDestacada = categoria,
         )
     }

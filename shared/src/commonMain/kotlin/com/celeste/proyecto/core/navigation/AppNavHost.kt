@@ -8,27 +8,20 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.celeste.proyecto.catalog.presentation.screen.CatalogScreen
 import com.celeste.proyecto.catalog.presentation.viewmodel.CatalogViewModel
+import com.celeste.proyecto.main.MainShellScreen
 import com.celeste.proyecto.moviedetail.presentation.effects.MovieDetailEffects
 import com.celeste.proyecto.moviedetail.presentation.screen.MovieDetailScreen
 import com.celeste.proyecto.moviedetail.presentation.state.MovieDetailEvents
 import com.celeste.proyecto.moviedetail.presentation.state.MovieDetailVM
-import com.celeste.proyecto.movies.presentation.effects.MoviesEffects
-import com.celeste.proyecto.movies.presentation.screen.MoviesScreen
-import com.celeste.proyecto.movies.presentation.state.MoviesVM
-import com.celeste.proyecto.notes.presentation.screen.NotesScreen
 import com.celeste.proyecto.notes.presentation.viewmodel.NotesViewModel
 import com.celeste.proyecto.profile.presentation.effects.ProfileEffects
-import com.celeste.proyecto.profile.presentation.screen.ProfileScreen
 import com.celeste.proyecto.profile.presentation.state.ProfileVM
 import com.celeste.proyecto.signin.presentation.screen.SignInScreen
 import com.celeste.proyecto.signin.presentation.state.SignInVM
 import com.celeste.proyecto.signup.presentation.effects.SignUpEffects
 import com.celeste.proyecto.signup.presentation.screen.SignUpScreen
 import com.celeste.proyecto.signup.presentation.state.SignUpVM
-import com.celeste.proyecto.userinformation.presentation.effects.UserInformationEffects
-import com.celeste.proyecto.userinformation.presentation.screen.UserInformationScreen
 import com.celeste.proyecto.userinformation.presentation.state.UserInformationVM
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -86,48 +79,40 @@ fun AppNavHost(
             )
         }
 
+        // Pantalla Principal (Shell con Bottom Navigation de 4 secciones: Inicio, Películas, Perfil, Notas)
         composable(NavRoute.Catalog.route) {
-            val viewModel: CatalogViewModel = koinViewModel()
+            val catalogViewModel: CatalogViewModel = koinViewModel()
+            val profileViewModel: ProfileVM = koinViewModel()
+            val profileState by profileViewModel.uiState.collectAsState()
 
-            CatalogScreen(
-                viewModel = viewModel,
-                onMovieClick = { movieId ->
-                    navController.navigate(NavRoute.MovieDetail.createRoute(movieId.toString()))
-                },
-                onNotesClick = {
-                    navController.navigate(NavRoute.Notes.route)
-                },
-            )
-        }
+            val userInformationViewModel: UserInformationVM = koinViewModel()
+            val userInformationState by userInformationViewModel.uiState.collectAsState()
 
-        composable(NavRoute.Notes.route) {
-            val viewModel: NotesViewModel = koinViewModel()
-
-            NotesScreen(
-                viewModel = viewModel,
-                onBackClick = {
-                    navController.popBackStack()
-                },
-            )
-        }
-
-        composable(NavRoute.Movies.route) {
-            val viewModel: MoviesVM = koinViewModel()
-            val state by viewModel.uiState.collectAsState()
+            val notesViewModel: NotesViewModel = koinViewModel()
 
             LaunchedEffect(Unit) {
-                viewModel.effect.collect { effect ->
+                profileViewModel.effect.collect { effect ->
                     when (effect) {
-                        is MoviesEffects.NavigateToDetail -> {
-                            navController.navigate(NavRoute.MovieDetail.createRoute(effect.movieId))
+                        is ProfileEffects.NavigateToSignIn -> {
+                            navController.navigate(NavRoute.SignIn.route) {
+                                popUpTo(0) { inclusive = true }
+                            }
                         }
+                        else -> {}
                     }
                 }
             }
 
-            MoviesScreen(
-                state = state,
-                onEvent = viewModel::onEvent,
+            MainShellScreen(
+                catalogViewModel = catalogViewModel,
+                profileState = profileState,
+                onProfileEvent = profileViewModel::onEvent,
+                userInformationState = userInformationState,
+                onUserInformationEvent = userInformationViewModel::onEvent,
+                notesViewModel = notesViewModel,
+                onMovieClick = { movieId ->
+                    navController.navigate(NavRoute.MovieDetail.createRoute(movieId.toString()))
+                },
             )
         }
 
@@ -151,53 +136,6 @@ fun AppNavHost(
             }
 
             MovieDetailScreen(
-                state = state,
-                onEvent = viewModel::onEvent,
-            )
-        }
-
-        composable(NavRoute.Profile.route) {
-            val viewModel: ProfileVM = koinViewModel()
-            val state by viewModel.uiState.collectAsState()
-
-            LaunchedEffect(Unit) {
-                viewModel.effect.collect { effect ->
-                    when (effect) {
-                        is ProfileEffects.NavigateToEditProfile -> {}
-                        is ProfileEffects.NavigateToUserInformation -> {
-                            navController.navigate(NavRoute.UserInformation.route)
-                        }
-                        is ProfileEffects.NavigateToSignIn -> {
-                            navController.navigate(NavRoute.SignIn.route) {
-                                popUpTo(0) { inclusive = true }
-                            }
-                        }
-                    }
-                }
-            }
-
-            ProfileScreen(
-                state = state,
-                onEvent = viewModel::onEvent,
-            )
-        }
-
-        composable(NavRoute.UserInformation.route) {
-            val viewModel: UserInformationVM = koinViewModel()
-            val state by viewModel.uiState.collectAsState()
-
-            LaunchedEffect(Unit) {
-                viewModel.effect.collect { effect ->
-                    when (effect) {
-                        is UserInformationEffects.ShowToast -> {}
-                        is UserInformationEffects.NavigateBack -> {
-                            navController.popBackStack()
-                        }
-                    }
-                }
-            }
-
-            UserInformationScreen(
                 state = state,
                 onEvent = viewModel::onEvent,
             )

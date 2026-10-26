@@ -7,15 +7,17 @@ import kotlinx.coroutines.flow.map
 
 class InMemoryNotesDataSource : NotesRemoteDataSource {
     private val _notes = MutableStateFlow<List<Note>>(emptyList())
+    private var counter = 1000L
 
     override fun observeNotes(): Flow<Result<List<Note>>> =
         _notes.map { Result.success(it) }
 
     override suspend fun addNote(text: String): Result<Unit> {
+        counter++
         val newNote = Note(
-            id = System.currentTimeMillis().toString(),
+            id = counter.toString(),
             text = text,
-            createdAt = System.currentTimeMillis(),
+            createdAt = counter,
         )
         _notes.value = (_notes.value + newNote).sortedByDescending { it.createdAt }
         return Result.success(Unit)

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common -->
+    <string name="common_loading">Loading...</string>
+    <string name="common_retry">Retry</string>
+    <string name="common_back">⬅ Back</string>
+    <string name="common_send">Send</string>
+    <string name="common_error">Error: %1$s</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_movies">Movies</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_notes">Notes</string>
+
+    <!-- Home -->
+    <string name="home_welcome">Hello! Welcome to Celeste</string>
+    <string name="home_featured_title">Featured Movies</string>
+    <string name="home_see_all">See all</string>
+    <string name="home_featured_count">Showing %1$d of 5 featured</string>
+
+    <!-- SignIn -->
+    <string name="signin_title">Welcome</string>
+    <string name="signin_subtitle">Sign in to continue</string>
+    <string name="signin_email_label">Email address</string>
+    <string name="signin_email_placeholder">example@email.com</string>
+    <string name="signin_pass_label">Password</string>
+    <string name="signin_pass_placeholder">********</string>
+    <string name="signin_button">Sign In</string>
+    <string name="signin_no_account">Don\'t have an account? </string>
+    <string name="signin_signup_link">Sign Up</string>
+
+    <!-- SignUp -->
+    <string name="signup_title">Create Account</string>
+    <string name="signup_subtitle">Fill in your details to register</string>
+    <string name="signup_name_label">Full Name</string>
+    <string name="signup_name_placeholder">Your name</string>
+    <string name="signup_email_label">Email address</string>
+    <string name="signup_email_placeholder">example@email.com</string>
+    <string name="signup_pass_label">Password</string>
+    <string name="signup_pass_placeholder">********</string>
+    <string name="signup_button">Sign Up</string>
+    <string name="signup_has_account">Already have an account? </string>
+    <string name="signup_signin_link">Sign In</string>
+
+    <!-- Catalog / Movies -->
+    <string name="movies_title">Full Movies Catalog</string>
+    <string name="movies_search_placeholder">Search movie by title...</string>
+    <string name="catalog_notes_button">📝 Notes</string>
+    <string name="catalog_featured_category">🏷️ Featured category: %1$s</string>
+    <string name="catalog_promo_banner">🔥 Special Celeste Offer! Get 50% off today.</string>
+
+    <!-- Movie Detail -->
+    <string name="movie_detail_rating">Rating: ⭐ %1$s</string>
+    <string name="movie_detail_overview">Full details for movie %1$s</string>
+
+    <!-- Profile -->
+    <string name="profile_title">My Profile</string>
+    <string name="profile_user_prefix">👤 %1$s</string>
+    <string name="profile_favorites_title">⭐ Favorite Movies</string>
+    <string name="profile_favorites_count">%1$d saved</string>
+    <string name="profile_edit_button">✏️  Edit Profile</string>
+    <string name="profile_search_github_button">🔍  Search Users (GitHub)</string>
+    <string name="profile_logout_button">🚪  Sign Out</string>
+    <string name="profile_language_title">🌐 Language / Idioma</string>
+    <string name="language_es">Spanish</string>
+    <string name="language_en">English</string>
+
+    <!-- User Information -->
+    <string name="user_info_title">Search GitHub User</string>
+    <string name="user_info_placeholder">Enter GitHub alias</string>
+    <string name="user_info_search_button">Search</string>
+    <string name="user_info_followers">Followers: %1$d</string>
+    <string name="user_info_public_repos">Public Repositories: %1$d</string>
+
+    <!-- Notes -->
+    <string name="notes_title">📝 Real-Time Notes</string>
+    <string name="notes_placeholder">Write a note or review...</string>
+    <string name="notes_send_button">Publish Note</string>
+    <string name="notes_empty">No notes yet. Write the first one!</string>
+</resources>

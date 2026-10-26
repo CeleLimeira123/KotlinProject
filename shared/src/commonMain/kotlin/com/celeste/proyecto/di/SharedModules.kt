@@ -6,6 +6,7 @@ import com.celeste.proyecto.catalog.data.repository.CatalogRepositoryImpl
 import com.celeste.proyecto.catalog.data.service.CatalogService
 import com.celeste.proyecto.catalog.domain.repository.CatalogRepository
 import com.celeste.proyecto.catalog.domain.usecase.GetCatalogMoviesUseCase
+import com.celeste.proyecto.core.localization.LanguageManager
 import com.celeste.proyecto.moviedetail.data.repository.MovieDetailRepositoryImpl
 import com.celeste.proyecto.moviedetail.domain.repository.MovieDetailRepository
 import com.celeste.proyecto.moviedetail.domain.usecase.GetMovieDetailUseCase
@@ -56,6 +57,7 @@ val dataModule = module {
     single<CatalogRepository> { CatalogRepositoryImpl(get()) }
     singleOf(::AppConfigRepositoryImpl) bind AppConfigRepository::class
     singleOf(::NotesRepositoryImpl) bind NotesRepository::class
+    singleOf(::LanguageManager)
 }
 
 val domainModule = module {

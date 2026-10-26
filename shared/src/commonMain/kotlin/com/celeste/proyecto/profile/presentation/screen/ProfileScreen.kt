@@ -18,21 +18,45 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.celeste.proyecto.core.localization.LanguageManager
 import com.celeste.proyecto.profile.presentation.state.ProfileEvents
 import com.celeste.proyecto.profile.presentation.state.ProfileState
+import com.celeste.proyecto.resources.Res
+import com.celeste.proyecto.resources.language_en
+import com.celeste.proyecto.resources.language_es
+import com.celeste.proyecto.resources.profile_favorites_count
+import com.celeste.proyecto.resources.profile_favorites_title
+import com.celeste.proyecto.resources.profile_language_title
+import com.celeste.proyecto.resources.profile_logout_button
+import com.celeste.proyecto.resources.profile_title
+import com.celeste.proyecto.resources.profile_user_prefix
+import com.celeste.proyecto.resources.user_info_placeholder
+import com.celeste.proyecto.resources.user_info_search_button
+import com.celeste.proyecto.resources.user_info_title
+import com.celeste.proyecto.userinformation.presentation.state.UserInformationEvents
+import com.celeste.proyecto.userinformation.presentation.state.UserInformationState
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 @Composable
 fun ProfileScreen(
     state: ProfileState = ProfileState(),
     onEvent: (ProfileEvents) -> Unit = {},
+    userInformationState: UserInformationState = UserInformationState(),
+    onUserInformationEvent: (UserInformationEvents) -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
+    val languageManager: LanguageManager = koinInject()
+    val currentLang by languageManager.currentLanguage.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (state.isLoading) {
@@ -53,7 +77,7 @@ fun ProfileScreen(
             ) {
                 // Encabezado
                 Text(
-                    text = "Mi Perfil",
+                    text = stringResource(Res.string.profile_title),
                     style = MaterialTheme.typography.headlineLarge,
                     color = Color(0xFF6750A4),
                     modifier = Modifier.padding(bottom = 16.dp),
@@ -70,7 +94,7 @@ fun ProfileScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             Text(
-                                text = "👤 ${profile.name}",
+                                text = stringResource(Res.string.profile_user_prefix, profile.name),
                                 style = MaterialTheme.typography.titleLarge,
                             )
                             Spacer(modifier = Modifier.height(4.dp))
@@ -82,7 +106,89 @@ fun ProfileScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Selector de Idioma (Español / English)
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        ),
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = stringResource(Res.string.profile_language_title),
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            ) {
+                                Button(
+                                    onClick = { languageManager.setLanguage("es") },
+                                    modifier = Modifier.weight(1f),
+                                    colors = if (currentLang == "es") ButtonDefaults.buttonColors() else ButtonDefaults.outlinedButtonColors(),
+                                ) {
+                                    Text(stringResource(Res.string.language_es))
+                                }
+
+                                Button(
+                                    onClick = { languageManager.setLanguage("en") },
+                                    modifier = Modifier.weight(1f),
+                                    colors = if (currentLang == "en") ButtonDefaults.buttonColors() else ButtonDefaults.outlinedButtonColors(),
+                                ) {
+                                    Text(stringResource(Res.string.language_en))
+                                }
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Búsqueda de Usuarios GitHub Integrada
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = stringResource(Res.string.user_info_title),
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                OutlinedTextField(
+                                    value = userInformationState.searchAlias,
+                                    onValueChange = { onUserInformationEvent(UserInformationEvents.OnSearchAliasChanged(it)) },
+                                    label = { Text(stringResource(Res.string.user_info_placeholder)) },
+                                    singleLine = true,
+                                    modifier = Modifier.weight(1f),
+                                )
+
+                                Button(
+                                    onClick = { onUserInformationEvent(UserInformationEvents.OnSearchClicked) },
+                                    enabled = !userInformationState.isLoading,
+                                    modifier = Modifier.padding(start = 8.dp),
+                                ) {
+                                    Text(stringResource(Res.string.user_info_search_button))
+                                }
+                            }
+
+                            userInformationState.githubUser?.let { gh ->
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Text(text = "GitHub: ${gh.alias}", style = MaterialTheme.typography.bodyMedium)
+                                Text(text = "Empresa: ${gh.company.ifBlank { "-" }}", style = MaterialTheme.typography.bodySmall)
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     // Sección de Favoritos
                     Card(
@@ -99,35 +205,15 @@ fun ProfileScreen(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                text = "⭐ Películas Favoritas",
+                                text = stringResource(Res.string.profile_favorites_title),
                                 style = MaterialTheme.typography.titleMedium,
                             )
                             Text(
-                                text = "12 guardadas",
+                                text = stringResource(Res.string.profile_favorites_count, 12),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                             )
                         }
-                    }
-
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    // Botones organizados verticalmente
-                    OutlinedButton(
-                        onClick = { onEvent(ProfileEvents.OnEditProfileClicked) },
-                        modifier = Modifier.fillMaxWidth().height(50.dp),
-                    ) {
-                        Text("✏️  Editar Perfil")
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Button(
-                        onClick = { onEvent(ProfileEvents.OnSearchUsersClicked) },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6750A4)),
-                        modifier = Modifier.fillMaxWidth().height(50.dp),
-                    ) {
-                        Text("🔍  Buscar Usuarios (GitHub)")
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -138,7 +224,7 @@ fun ProfileScreen(
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                         modifier = Modifier.fillMaxWidth().height(50.dp),
                     ) {
-                        Text("🚪  Cerrar Sesión")
+                        Text(stringResource(Res.string.profile_logout_button))
                     }
                 }
             }

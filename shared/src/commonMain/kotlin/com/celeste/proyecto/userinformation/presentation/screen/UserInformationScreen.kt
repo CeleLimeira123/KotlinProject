@@ -23,8 +23,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.celeste.proyecto.resources.Res
+import com.celeste.proyecto.resources.common_back
+import com.celeste.proyecto.resources.user_info_placeholder
+import com.celeste.proyecto.resources.user_info_search_button
+import com.celeste.proyecto.resources.user_info_title
 import com.celeste.proyecto.userinformation.presentation.state.UserInformationEvents
 import com.celeste.proyecto.userinformation.presentation.state.UserInformationState
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun UserInformationScreen(
@@ -46,24 +52,23 @@ fun UserInformationScreen(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             OutlinedButton(onClick = { onEvent(UserInformationEvents.OnBackClicked) }) {
-                Text("⬅ Volver")
+                Text(stringResource(Res.string.common_back))
             }
         }
 
         Text(
-            text = "Búsqueda GitHub & Información",
+            text = stringResource(Res.string.user_info_title),
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 16.dp),
         )
 
-        // Sección de Búsqueda de Usuario GitHub
         Card(
             modifier = Modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = "Buscar Usuario en GitHub",
+                    text = stringResource(Res.string.user_info_title),
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -75,7 +80,7 @@ fun UserInformationScreen(
                     OutlinedTextField(
                         value = state.searchAlias,
                         onValueChange = { onEvent(UserInformationEvents.OnSearchAliasChanged(it)) },
-                        label = { Text("Alias / Username") },
+                        label = { Text(stringResource(Res.string.user_info_placeholder)) },
                         singleLine = true,
                         modifier = Modifier.weight(1f),
                     )
@@ -93,7 +98,7 @@ fun UserInformationScreen(
                                 strokeWidth = 2.dp,
                             )
                         } else {
-                            Text("Buscar")
+                            Text(stringResource(Res.string.user_info_search_button))
                         }
                     }
                 }
@@ -102,7 +107,6 @@ fun UserInformationScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Tarjeta de Error
         if (state.error != null) {
             Card(
                 colors = CardDefaults.cardColors(
@@ -119,7 +123,6 @@ fun UserInformationScreen(
             }
         }
 
-        // Tarjeta con Datos de GitHub si existe resultado
         state.githubUser?.let { githubUser ->
             Card(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
@@ -127,32 +130,19 @@ fun UserInformationScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Resultado de GitHub",
+                        text = "GitHub: ${githubUser.alias}",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Alias: ${githubUser.alias}", style = MaterialTheme.typography.bodyLarge)
-                    Text(
-                        text = "Empresa: ${githubUser.company.ifBlank { "No especificada" }}",
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-                    Text(
-                        text = "Email: ${githubUser.email.ifBlank { "No público" }}",
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-                    Text(
-                        text = "Avatar URL: ${githubUser.avatarUrl}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.outline,
-                    )
+                    Text(text = "Empresa: ${githubUser.company.ifBlank { "-" }}", style = MaterialTheme.typography.bodyLarge)
+                    Text(text = "Email: ${githubUser.email.ifBlank { "-" }}", style = MaterialTheme.typography.bodyLarge)
                 }
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Datos del Usuario Local
         state.localInfo?.let { info ->
             Card(
                 modifier = Modifier.fillMaxWidth(),
@@ -160,13 +150,12 @@ fun UserInformationScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Información Local",
+                        text = "Info",
                         style = MaterialTheme.typography.titleMedium,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Dirección: ${info.address}", style = MaterialTheme.typography.bodyMedium)
-                    Text(text = "Teléfono: ${info.phone}", style = MaterialTheme.typography.bodyMedium)
-                    Text(text = "Fecha de Nacimiento: ${info.birthDate}", style = MaterialTheme.typography.bodyMedium)
+                    Text(text = info.address, style = MaterialTheme.typography.bodyMedium)
+                    Text(text = info.phone, style = MaterialTheme.typography.bodyMedium)
                 }
             }
         }

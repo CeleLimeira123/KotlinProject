@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Comunes -->
+    <string name="common_loading">Cargando...</string>
+    <string name="common_retry">Reintentar</string>
+    <string name="common_back">⬅ Volver</string>
+    <string name="common_send">Enviar</string>
+    <string name="common_error">Error: %1$s</string>
+
+    <!-- Navegación -->
+    <string name="nav_home">Inicio</string>
+    <string name="nav_movies">Películas</string>
+    <string name="nav_profile">Perfil</string>
+    <string name="nav_notes">Notas</string>
+
+    <!-- Inicio -->
+    <string name="home_welcome">¡Hola! Bienvenido a Celeste</string>
+    <string name="home_featured_title">Películas Destacadas</string>
+    <string name="home_see_all">Ver todas</string>
+    <string name="home_featured_count">Mostrando %1$d de 5 destacadas</string>
+
+    <!-- SignIn -->
+    <string name="signin_title">Bienvenido</string>
+    <string name="signin_subtitle">Inicia sesión para continuar</string>
+    <string name="signin_email_label">Correo electrónico</string>
+    <string name="signin_email_placeholder">ejemplo@correo.com</string>
+    <string name="signin_pass_label">Contraseña</string>
+    <string name="signin_pass_placeholder">********</string>
+    <string name="signin_button">Iniciar Sesión</string>
+    <string name="signin_no_account">¿No tienes una cuenta? </string>
+    <string name="signin_signup_link">Regístrate</string>
+
+    <!-- SignUp -->
+    <string name="signup_title">Crear Cuenta</string>
+    <string name="signup_subtitle">Completa tus datos para registrarte</string>
+    <string name="signup_name_label">Nombre completo</string>
+    <string name="signup_name_placeholder">Tu nombre</string>
+    <string name="signup_email_label">Correo electrónico</string>
+    <string name="signup_email_placeholder">ejemplo@correo.com</string>
+    <string name="signup_pass_label">Contraseña</string>
+    <string name="signup_pass_placeholder">********</string>
+    <string name="signup_button">Registrarse</string>
+    <string name="signup_has_account">¿Ya tienes una cuenta? </string>
+    <string name="signup_signin_link">Inicia sesión</string>
+
+    <!-- Catálogo / Películas -->
+    <string name="movies_title">Catálogo Completo de Películas</string>
+    <string name="movies_search_placeholder">Buscar película por título...</string>
+    <string name="catalog_notes_button">📝 Notas</string>
+    <string name="catalog_featured_category">🏷️ Categoría destacada: %1$s</string>
+    <string name="catalog_promo_banner">🔥 ¡Promoción Especial Celeste! Obtén un 50% de descuento hoy.</string>
+
+    <!-- Detalle Película -->
+    <string name="movie_detail_rating">Rating: ⭐ %1$s</string>
+    <string name="movie_detail_overview">Detalle completo de la película %1$s</string>
+
+    <!-- Perfil -->
+    <string name="profile_title">Mi Perfil</string>
+    <string name="profile_user_prefix">👤 %1$s</string>
+    <string name="profile_favorites_title">⭐ Películas Favoritas</string>
+    <string name="profile_favorites_count">%1$d guardadas</string>
+    <string name="profile_edit_button">✏️  Editar Perfil</string>
+    <string name="profile_search_github_button">🔍  Buscar Usuarios (GitHub)</string>
+    <string name="profile_logout_button">🚪  Cerrar Sesión</string>
+    <string name="profile_language_title">🌐 Idioma / Language</string>
+    <string name="language_es">Español</string>
+    <string name="language_en">English</string>
+
+    <!-- Información de Usuario -->
+    <string name="user_info_title">Buscar Usuario GitHub</string>
+    <string name="user_info_placeholder">Ingresa alias de GitHub</string>
+    <string name="user_info_search_button">Buscar</string>
+    <string name="user_info_followers">Seguidores: %1$d</string>
+    <string name="user_info_public_repos">Repositorios públicos: %1$d</string>
+
+    <!-- Notas -->
+    <string name="notes_title">📝 Notas en Tiempo Real</string>
+    <string name="notes_placeholder">Escribe una nota o reseña...</string>
+    <string name="notes_send_button">Publicar Nota</string>
+    <string name="notes_empty">No hay notas aún. ¡Escribe la primera!</string>
+</resources>

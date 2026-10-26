@@ -27,6 +27,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.celeste.proyecto.notes.presentation.state.NotesEvents
 import com.celeste.proyecto.notes.presentation.viewmodel.NotesViewModel
+import com.celeste.proyecto.resources.Res
+import com.celeste.proyecto.resources.common_send
+import com.celeste.proyecto.resources.notes_empty
+import com.celeste.proyecto.resources.notes_placeholder
+import com.celeste.proyecto.resources.notes_title
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun NotesScreen(
@@ -47,7 +53,7 @@ fun NotesScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = "📝 Notas en Tiempo Real",
+                    text = stringResource(Res.string.notes_title),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.primary,
                 )
@@ -63,7 +69,7 @@ fun NotesScreen(
                 OutlinedTextField(
                     value = state.noteText,
                     onValueChange = { viewModel.onEvent(NotesEvents.OnTextChanged(it)) },
-                    placeholder = { Text("Escribe una nota o reseña...") },
+                    placeholder = { Text(stringResource(Res.string.notes_placeholder)) },
                     modifier = Modifier.weight(1f),
                     singleLine = true,
                 )
@@ -76,7 +82,7 @@ fun NotesScreen(
                     if (state.isSubmitting) {
                         CircularProgressIndicator(modifier = Modifier.height(20.dp), strokeWidth = 2.dp)
                     } else {
-                        Text("Enviar")
+                        Text(stringResource(Res.string.common_send))
                     }
                 }
             }
@@ -100,7 +106,7 @@ fun NotesScreen(
             } else if (state.notes.isEmpty()) {
                 Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
                     Text(
-                        text = "No hay notas aún. ¡Escribe la primera!",
+                        text = stringResource(Res.string.notes_empty),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.outline,
                     )

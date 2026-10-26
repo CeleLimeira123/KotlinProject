@@ -16,6 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.celeste.proyecto.moviedetail.presentation.state.MovieDetailEvents
 import com.celeste.proyecto.moviedetail.presentation.state.MovieDetailState
+import com.celeste.proyecto.resources.Res
+import com.celeste.proyecto.resources.common_back
+import com.celeste.proyecto.resources.movie_detail_overview
+import com.celeste.proyecto.resources.movie_detail_rating
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MovieDetailScreen(
@@ -38,14 +43,20 @@ fun MovieDetailScreen(
                         onClick = { onEvent(MovieDetailEvents.OnBackClicked) },
                         modifier = Modifier.padding(bottom = 16.dp),
                     ) {
-                        Text("⬅ Volver")
+                        Text(stringResource(Res.string.common_back))
                     }
 
                     Text(text = detail.title, style = MaterialTheme.typography.headlineLarge)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Rating: ⭐ ${detail.rating}", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        text = stringResource(Res.string.movie_detail_rating, detail.rating.toString()),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = detail.overview, style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        text = stringResource(Res.string.movie_detail_overview, detail.title),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
                 }
             }
         }

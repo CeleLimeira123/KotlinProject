@@ -9,6 +9,8 @@ import coil3.network.ktor3.KtorNetworkFetcherFactory
 import com.celeste.proyecto.core.navigation.AppNavHost
 import com.celeste.proyecto.di.appModules
 import org.koin.compose.KoinApplication
+import org.koin.compose.KoinContext
+import org.koin.mp.KoinPlatformTools
 
 @Composable
 @Preview
@@ -21,11 +23,19 @@ fun App() {
             .build()
     }
 
-    KoinApplication(application = {
-        modules(appModules)
-    }) {
-        MaterialTheme {
-            AppNavHost()
+    if (KoinPlatformTools.defaultContext().getOrNull() == null) {
+        KoinApplication(application = {
+            modules(appModules)
+        }) {
+            MaterialTheme {
+                AppNavHost()
+            }
+        }
+    } else {
+        KoinContext {
+            MaterialTheme {
+                AppNavHost()
+            }
         }
     }
 }

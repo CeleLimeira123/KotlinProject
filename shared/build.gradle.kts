@@ -45,7 +45,10 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.compose.uiTooling)
             implementation(libs.ktor.client.okhttp)
-
+            implementation(libs.firebase.config)
+            implementation(libs.firebase.database)
+            implementation(libs.firebase.auth)
+            implementation(libs.koinAndroid)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)

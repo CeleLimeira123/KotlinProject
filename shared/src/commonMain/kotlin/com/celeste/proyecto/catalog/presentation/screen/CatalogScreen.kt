@@ -4,12 +4,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
@@ -17,6 +20,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,8 +39,10 @@ import com.celeste.proyecto.catalog.presentation.viewmodel.CatalogViewModel
 fun CatalogScreen(
     viewModel: CatalogViewModel,
     onMovieClick: (Int) -> Unit = {},
+    onNotesClick: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val appConfig by viewModel.appConfig.collectAsState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -50,13 +56,85 @@ fun CatalogScreen(
             }
 
             is CatalogState.Success -> {
+                val suggestions = state.movies.take(appConfig.maxSugerenciasHome)
+
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
-                    modifier = Modifier.fillMaxSize().padding(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    items(state.movies) { movie ->
+                    // Header con Mensaje de Bienvenida y Botón a Notas en Tiempo Real
+                    item(span = { GridItemSpan(2) }) {
+                        Column {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    text = appConfig.mensajeBienvenida,
+                                    style = MaterialTheme.typography.headlineMedium,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.weight(1f),
+                                )
+
+                                OutlinedButton(onClick = onNotesClick) {
+                                    Text("📝 Notas")
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(4.dp))
+
+                            // Categoría destacada
+                            Surface(
+                                shape = MaterialTheme.shapes.small,
+                                color = MaterialTheme.colorScheme.primaryContainer,
+                            ) {
+                                Text(
+                                    text = "🏷️ Categoría destacada: ${appConfig.categoriaDestacada.uppercase()}",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                )
+                            }
+                        }
+                    }
+
+                    // Banner Promocional (Si mostrar_promo = true)
+                    if (appConfig.mostrarPromo) {
+                        item(span = { GridItemSpan(2) }) {
+                            Card(
+                                colors = CardDefaults.cardColors(
+                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                ),
+                                modifier = Modifier.fillMaxWidth(),
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(16.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Text(
+                                        text = "🔥 ¡Promoción Especial Celeste! Obtén un 50% de descuento hoy.",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    // Subtítulo con max sugerencias
+                    item(span = { GridItemSpan(2) }) {
+                        Text(
+                            text = "Sugerencias del día (${suggestions.size} de ${appConfig.maxSugerenciasHome} máx)",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.outline,
+                        )
+                    }
+
+                    items(suggestions) { movie ->
                         MovieItemCard(
                             movie = movie,
                             onMovieClick = onMovieClick,

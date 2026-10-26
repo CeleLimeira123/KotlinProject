@@ -2,6 +2,7 @@ package com.celeste.proyecto.profile.presentation.state
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.celeste.proyecto.auth.domain.usecase.SignOutUseCase
 import com.celeste.proyecto.profile.domain.usecase.GetProfileUseCase
 import com.celeste.proyecto.profile.presentation.effects.ProfileEffects
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class ProfileVM(
     private val getProfileUseCase: GetProfileUseCase,
+    private val signOutUseCase: SignOutUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProfileState())
@@ -37,6 +39,7 @@ class ProfileVM(
                 viewModelScope.launch { _effect.emit(ProfileEffects.NavigateToUserInformation) }
             }
             is ProfileEvents.OnSignOutClicked -> {
+                signOutUseCase()
                 viewModelScope.launch { _effect.emit(ProfileEffects.NavigateToSignIn) }
             }
         }
@@ -46,10 +49,10 @@ class ProfileVM(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             try {
-                val p = getProfileUseCase()
-                _uiState.update { it.copy(profile = p, isLoading = false) }
+                val profile = getProfileUseCase()
+                _uiState.update { it.copy(profile = profile, isLoading = false, error = null) }
             } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, error = e.message ?: "Error al cargar perfil") }
+                _uiState.update { it.copy(isLoading = false, profile = null, error = e.message ?: "Error al cargar perfil") }
             }
         }
     }

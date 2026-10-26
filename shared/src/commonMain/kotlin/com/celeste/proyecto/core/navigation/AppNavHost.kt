@@ -17,6 +17,8 @@ import com.celeste.proyecto.moviedetail.presentation.state.MovieDetailVM
 import com.celeste.proyecto.movies.presentation.effects.MoviesEffects
 import com.celeste.proyecto.movies.presentation.screen.MoviesScreen
 import com.celeste.proyecto.movies.presentation.state.MoviesVM
+import com.celeste.proyecto.notes.presentation.screen.NotesScreen
+import com.celeste.proyecto.notes.presentation.viewmodel.NotesViewModel
 import com.celeste.proyecto.profile.presentation.effects.ProfileEffects
 import com.celeste.proyecto.profile.presentation.screen.ProfileScreen
 import com.celeste.proyecto.profile.presentation.state.ProfileVM
@@ -91,6 +93,20 @@ fun AppNavHost(
                 viewModel = viewModel,
                 onMovieClick = { movieId ->
                     navController.navigate(NavRoute.MovieDetail.createRoute(movieId.toString()))
+                },
+                onNotesClick = {
+                    navController.navigate(NavRoute.Notes.route)
+                },
+            )
+        }
+
+        composable(NavRoute.Notes.route) {
+            val viewModel: NotesViewModel = koinViewModel()
+
+            NotesScreen(
+                viewModel = viewModel,
+                onBackClick = {
+                    navController.popBackStack()
                 },
             )
         }

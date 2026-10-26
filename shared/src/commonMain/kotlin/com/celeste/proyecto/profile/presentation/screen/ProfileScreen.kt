@@ -17,7 +17,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,9 +24,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.celeste.proyecto.core.localization.LanguageManager
+import com.celeste.proyecto.core.theme.FontSizeScale
+import com.celeste.proyecto.core.theme.ThemeManager
+import com.celeste.proyecto.core.theme.ThemeMode
 import com.celeste.proyecto.profile.presentation.state.ProfileEvents
 import com.celeste.proyecto.profile.presentation.state.ProfileState
 import com.celeste.proyecto.resources.Res
@@ -58,6 +59,10 @@ fun ProfileScreen(
     val languageManager: LanguageManager = koinInject()
     val currentLang by languageManager.currentLanguage.collectAsState()
 
+    val themeManager: ThemeManager = koinInject()
+    val currentThemeMode by themeManager.themeMode.collectAsState()
+    val currentFontSizeScale by themeManager.fontSizeScale.collectAsState()
+
     Box(modifier = Modifier.fillMaxSize()) {
         if (state.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -79,7 +84,7 @@ fun ProfileScreen(
                 Text(
                     text = stringResource(Res.string.profile_title),
                     style = MaterialTheme.typography.headlineLarge,
-                    color = Color(0xFF6750A4),
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(bottom = 16.dp),
                 )
 
@@ -103,6 +108,109 @@ fun ProfileScreen(
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Selector de Tema (Sistema, Claro, Oscuro, Alto Contraste)
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        ),
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = "🎨 Tema / Theme",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            ) {
+                                Button(
+                                    onClick = { themeManager.setThemeMode(ThemeMode.SYSTEM) },
+                                    modifier = Modifier.weight(1f),
+                                    colors = if (currentThemeMode == ThemeMode.SYSTEM) ButtonDefaults.buttonColors() else ButtonDefaults.outlinedButtonColors(),
+                                ) {
+                                    Text("Auto", style = MaterialTheme.typography.labelSmall)
+                                }
+
+                                Button(
+                                    onClick = { themeManager.setThemeMode(ThemeMode.LIGHT) },
+                                    modifier = Modifier.weight(1f),
+                                    colors = if (currentThemeMode == ThemeMode.LIGHT) ButtonDefaults.buttonColors() else ButtonDefaults.outlinedButtonColors(),
+                                ) {
+                                    Text("Claro", style = MaterialTheme.typography.labelSmall)
+                                }
+
+                                Button(
+                                    onClick = { themeManager.setThemeMode(ThemeMode.DARK) },
+                                    modifier = Modifier.weight(1f),
+                                    colors = if (currentThemeMode == ThemeMode.DARK) ButtonDefaults.buttonColors() else ButtonDefaults.outlinedButtonColors(),
+                                ) {
+                                    Text("Oscuro", style = MaterialTheme.typography.labelSmall)
+                                }
+
+                                Button(
+                                    onClick = { themeManager.setThemeMode(ThemeMode.HIGH_CONTRAST) },
+                                    modifier = Modifier.weight(1f),
+                                    colors = if (currentThemeMode == ThemeMode.HIGH_CONTRAST) ButtonDefaults.buttonColors() else ButtonDefaults.outlinedButtonColors(),
+                                ) {
+                                    Text("Contraste", style = MaterialTheme.typography.labelSmall)
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            // Tamaños de Letra
+                            Text(
+                                text = "🔤 Tamaño de letra / Font Size",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            ) {
+                                Button(
+                                    onClick = { themeManager.setFontSizeScale(FontSizeScale.SMALL) },
+                                    modifier = Modifier.weight(1f),
+                                    colors = if (currentFontSizeScale == FontSizeScale.SMALL) ButtonDefaults.buttonColors() else ButtonDefaults.outlinedButtonColors(),
+                                ) {
+                                    Text("A-", style = MaterialTheme.typography.labelSmall)
+                                }
+
+                                Button(
+                                    onClick = { themeManager.setFontSizeScale(FontSizeScale.NORMAL) },
+                                    modifier = Modifier.weight(1f),
+                                    colors = if (currentFontSizeScale == FontSizeScale.NORMAL) ButtonDefaults.buttonColors() else ButtonDefaults.outlinedButtonColors(),
+                                ) {
+                                    Text("A", style = MaterialTheme.typography.labelSmall)
+                                }
+
+                                Button(
+                                    onClick = { themeManager.setFontSizeScale(FontSizeScale.LARGE) },
+                                    modifier = Modifier.weight(1f),
+                                    colors = if (currentFontSizeScale == FontSizeScale.LARGE) ButtonDefaults.buttonColors() else ButtonDefaults.outlinedButtonColors(),
+                                ) {
+                                    Text("A+", style = MaterialTheme.typography.labelSmall)
+                                }
+
+                                Button(
+                                    onClick = { themeManager.setFontSizeScale(FontSizeScale.EXTRA_LARGE) },
+                                    modifier = Modifier.weight(1f),
+                                    colors = if (currentFontSizeScale == FontSizeScale.EXTRA_LARGE) ButtonDefaults.buttonColors() else ButtonDefaults.outlinedButtonColors(),
+                                ) {
+                                    Text("A++", style = MaterialTheme.typography.labelSmall)
+                                }
+                            }
                         }
                     }
 

@@ -1,6 +1,5 @@
 package com.celeste.proyecto
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -12,6 +11,8 @@ import coil3.network.ktor3.KtorNetworkFetcherFactory
 import com.celeste.proyecto.core.localization.LanguageManager
 import com.celeste.proyecto.core.localization.LocalAppLocale
 import com.celeste.proyecto.core.navigation.AppNavHost
+import com.celeste.proyecto.core.theme.CelesteAppTheme
+import com.celeste.proyecto.core.theme.ThemeManager
 import com.celeste.proyecto.di.appModules
 import org.koin.compose.KoinApplication
 import org.koin.compose.KoinContext
@@ -47,8 +48,15 @@ private fun AppContent() {
     val languageManager: LanguageManager = koinInject()
     val selectedLanguage by languageManager.currentLanguage.collectAsState()
 
+    val themeManager: ThemeManager = koinInject()
+    val themeMode by themeManager.themeMode.collectAsState()
+    val fontSizeScale by themeManager.fontSizeScale.collectAsState()
+
     CompositionLocalProvider(LocalAppLocale provides selectedLanguage) {
-        MaterialTheme {
+        CelesteAppTheme(
+            themeMode = themeMode,
+            fontSizeScale = fontSizeScale,
+        ) {
             AppNavHost()
         }
     }

@@ -1,4 +1,14 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
+
+val localProps = Properties()
+val localFile = rootProject.file("local.properties")
+if (localFile.exists()) {
+    localProps.load(localFile.inputStream())
+}
+val tmdbApiKey = localProps.getProperty("TMDB_API_KEY") ?: ""
+val grpcHost = localProps.getProperty("GRPC_HOST") ?: "10.0.2.2"
+val grpcPort = localProps.getProperty("GRPC_PORT") ?: "50051"
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -16,6 +26,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)          // NUEVO: NotificationCompat
     implementation(libs.firebase.messaging)         // NUEVO: notificaciones push (FCM)
+    implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.koinAndroid)
     implementation(libs.compose.ui)
     implementation(libs.compose.foundation)
@@ -36,6 +47,9 @@ android {
         versionName = "1.0"
 
         buildConfigField("String", "GLOBAL_PROVIDER", "\"CalyrSoft\"")
+        buildConfigField("String", "TMDB_API_KEY", "\"$tmdbApiKey\"")
+        buildConfigField("String", "GRPC_HOST", "\"$grpcHost\"")
+        buildConfigField("String", "GRPC_PORT", "\"$grpcPort\"")
     }
 
     flavorDimensions += "environment"

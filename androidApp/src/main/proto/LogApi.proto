@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_package = "com.celeste.proyecto.logs";
+
+service LogService {
+  rpc send(LogRequest) returns (LogResponse);
+}
+
+message LogRequest {
+  repeated LogData logs = 1;
+}
+
+message LogData {
+  string logLevel = 1;
+  string message = 2;
+  int64 timestamp = 3;
+  string userId = 4;
+}
+
+message LogResponse {
+  bool success = 1;
+}

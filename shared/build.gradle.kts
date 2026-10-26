@@ -48,6 +48,7 @@ kotlin {
             implementation(libs.firebase.config)
             implementation(libs.firebase.database)
             implementation(libs.firebase.auth)
+            implementation(libs.androidx.work.runtime.ktx)
             implementation(libs.koinAndroid)
         }
         commonMain.dependencies {

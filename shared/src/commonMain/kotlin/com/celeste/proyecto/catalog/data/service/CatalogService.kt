@@ -9,6 +9,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 class CatalogService(
+    private val apiKey: String = "fa3e844ce31744388e07fa47c7c5d8c3",
     private val client: HttpClient = HttpClient {
         expectSuccess = true
         install(ContentNegotiation) {
@@ -23,7 +24,7 @@ class CatalogService(
     },
 ) {
     suspend fun fetchCatalog(): CatalogDto {
-        val url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=fa3e844ce31744388e07fa47c7c5d8c3"
+        val url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=$apiKey"
         val response = client.get(url)
         return response.body<CatalogDto>()
     }

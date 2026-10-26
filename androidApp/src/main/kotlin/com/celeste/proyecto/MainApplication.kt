@@ -3,6 +3,7 @@ package com.celeste.proyecto
 import android.app.Application
 import android.util.Log
 import com.celeste.proyecto.di.initKoin
+import com.celeste.proyecto.scheduler.SyncScheduler
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import org.koin.android.ext.koin.androidContext
@@ -14,6 +15,13 @@ class MainApplication : Application() {
             androidContext(this@MainApplication)
         }
         NotificationHelper.createChannel(this)
+
+        try {
+            SyncScheduler(this).schedulePeriodicalSync()
+        } catch (e: Exception) {
+            Log.w("MainApplication", "Error al programar SyncScheduler: ${e.message}")
+        }
+
         logPushToken()
     }
 
